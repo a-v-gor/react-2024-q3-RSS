@@ -5,3 +5,23 @@ html {
 body {
   margin: 0;
 }
+
+.header {
+  padding: 2em 0;
+  background-color: #ffebcd;
+}
+
+.header__title {
+  margin: 0;
+  padding-bottom: 1em;
+  font-size: 3em;
+  text-align: center;
+}
+
+.search-form {
+  text-align: center;
+}
+
+.search-form__label {
+  font-size: 1.6em;
+}
