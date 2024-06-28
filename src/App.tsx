@@ -1,23 +1,45 @@
 import { ChangeEvent, Component, FormEvent, ReactNode } from "react";
 import {ResponseData, PokemonData} from "./iData";
-import Results from "./components/results/Results";
+// import Results from "./components/results/Results";
 
 interface AppState {
   query: string,
-  data: PokemonData[] | null
+  data: PokemonData[] | null,
+  loading: boolean,
+  error: boolean
 }
 
 class App extends Component <unknown, AppState>  {
 
   state: Readonly<AppState> = {
     query: localStorage.getItem('ag-pokemon-database') ?? '',
-    data: null
+    data: null,
+    loading: true,
+    error: false
   }
 
-  async componentDidMount(): Promise<void> {
-    if (this.state.data === null) {
-      await this.getCardsData();
+  async componentDidMount() {
+    const url = 'https://api.pokemontcg.io/v2/cards/';
+    const options = {
+      method: 'GET',
+      headers: {
+        'X-Api-Key': 'cdfdabe0-4e3b-47d9-bb45-d216d2ce8d79'
+      }
     }
+    await fetch(url, options)
+    .then((response) => response.json())
+    .then((cardsData: ResponseData) => {
+        this.setState({
+        data: cardsData.data,
+        loading: false
+      }),
+      () => {
+        this.setState({
+          loading: false, 
+          error: true
+        })
+      }
+    })
   }
 
   handleInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -28,24 +50,7 @@ class App extends Component <unknown, AppState>  {
 
   handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
-    console.log(this.state.data);
     localStorage.setItem('ag-pokemon-database', this.state.query);
-  }
-
-  getCardsData = async (): Promise<void> => {
-    const url = 'https://api.pokemontcg.io/v2/cards/';
-    const options = {
-      method: 'GET',
-      headers: {
-        'X-Api-Key': 'cdfdabe0-4e3b-47d9-bb45-d216d2ce8d79'
-      }
-    }
-    const response = await fetch(url, options);
-    const cardsData: ResponseData = await response.json() as ResponseData;
-    this.setState({
-      data: cardsData.data
-    })
   }
 
   render(): ReactNode {
@@ -61,7 +66,7 @@ class App extends Component <unknown, AppState>  {
         </header>
         <main className="main">
           <div className="main__wrapper">
-            <Results data={this.state.data}/>
+            {/* <Results data={this.state.data} loading = {this.state.loading} error= {this.state.error}/> */}
           </div>
         </main>
       </>
