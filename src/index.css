@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 html {
   font-size: 62.5%;
 }
@@ -38,7 +42,7 @@ body {
 }
 
 .main__wrapper {
-  max-width: 90rem;
+  max-width: 92rem;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem 0;
 }

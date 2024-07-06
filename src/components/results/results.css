@@ -1,19 +1,35 @@
 .results__list {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 1rem;
 }
 
 .results__card {
   display: block;
-  width: 24.5rem;
+  width: 30rem;
   border: 0.1rem solid #8a2be2;
   border-radius: 2rem;
 }
 
 .card {
   background-color: #f8f8ff;
-  padding: 0.5rem;
+  padding: 0.8rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.card__description-wrapper {
+  transition: 0.6s;
+  position:absolute;
+  bottom: -110%;
+}
+
+.card:hover > .card__description-wrapper {
+  bottom: 0;
+  background-color: #faebd7;
+  padding: 0.8rem;
+  border-radius: 0.8rem;
 }
 
 .card__title {
@@ -25,3 +41,4 @@
   width: 100%;
   height: auto;
 }
+

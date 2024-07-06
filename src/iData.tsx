@@ -3,8 +3,8 @@ interface PokemonData {
   name: string,
   supertype: string,
   subtypes: string[],
-  level: string,
-  hp: string,
+  level?: string,
+  hp?: string,
   types: string[],
   evolvesFrom: string,
   evolvesTo: string[],
@@ -13,7 +13,7 @@ interface PokemonData {
     name: string,
     text: string
   }[],
-  abilities:
+  abilities?:
     {
       name: string,
       text: string,
