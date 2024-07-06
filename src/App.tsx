@@ -23,13 +23,14 @@ class App extends Component <unknown, AppState>  {
   }
 
   loadData = async () => {
+    const apiKey = import.meta.env.VITE_API_KEY as string;
     const defaultQuery = 'https://api.pokemontcg.io/v2/cards/';
     const stateQuery = this.state.query;
     const url = stateQuery.length ? defaultQuery + `?q=name:${stateQuery}*` : defaultQuery;
     const options = {
       method: 'GET',
       headers: {
-        'X-Api-Key': 'cdfdabe0-4e3b-47d9-bb45-d216d2ce8d79'
+        'X-Api-Key': apiKey
       }
     }
     await fetch(url, options)
