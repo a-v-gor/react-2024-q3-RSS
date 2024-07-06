@@ -1,12 +1,11 @@
-import { ChangeEvent, Component, FormEvent, ReactNode } from "react";
+import { Component, FormEvent, ReactNode } from "react";
 import {ResponseData, PokemonData} from "./iData";
-// import Results from "./components/results/Results";
+import Results from "./components/results/Results";
 
 interface AppState {
   query: string,
   data: PokemonData[] | null,
-  loading: boolean,
-  error: boolean
+  isLoaded: boolean
 }
 
 class App extends Component <unknown, AppState>  {
@@ -14,12 +13,15 @@ class App extends Component <unknown, AppState>  {
   state: Readonly<AppState> = {
     query: localStorage.getItem('ag-pokemon-database') ?? '',
     data: null,
-    loading: true,
-    error: false
+    isLoaded: false
   }
 
-  async componentDidMount() {
-    const url = 'https://api.pokemontcg.io/v2/cards/';
+  loadData = async () => {
+    console.log('loadData');
+    
+    const defaultQuery = 'https://api.pokemontcg.io/v2/cards/';
+    const stateQuery = this.state.query;
+    const url = stateQuery.length ? defaultQuery + `?q=name:${stateQuery}*` : defaultQuery;
     const options = {
       method: 'GET',
       headers: {
@@ -29,44 +31,48 @@ class App extends Component <unknown, AppState>  {
     await fetch(url, options)
     .then((response) => response.json())
     .then((cardsData: ResponseData) => {
-        this.setState({
-        data: cardsData.data,
-        loading: false
+        this.setState(() => {
+          return {
+            data: cardsData.data,
+            isLoaded: true
+          }
       }),
       () => {
-        this.setState({
-          loading: false, 
-          error: true
-        })
+        console.log('error fetching data');
       }
     })
   }
 
-  handleInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    this.setState({
-      query: event.target.value
-    });
+  componentDidMount = async () => {
+    await this.loadData();
   }
 
   handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    localStorage.setItem('ag-pokemon-database', this.state.query);
+    const form = event.target as HTMLFormElement;
+    const input = form.childNodes[1] as HTMLInputElement;
+    const value = input.value;
+    localStorage.setItem('ag-pokemon-database', value);
+    this.setState({
+      query: value
+    })
   }
 
   render(): ReactNode {
+    const [data, isLoaded] = [this.state.data, this.state.isLoaded]
     return (
       <>
         <header className="header">
           <h1 className = 'header__title'>Pokémon Database</h1>
           <form className="search-form" onSubmit={this.handleSubmit}>
             <label htmlFor="search-form" className="search-form__label">Search the Pokemon: </label>
-            <input type="search" id="search-form" className="search-form__input" onChange={this.handleInputChange} defaultValue={this.state.query}/>
+            <input type="search" id="search-form" className="search-form__input" defaultValue={this.state.query}/>
             <button type="submit" className="search-form__button">Search</button>
           </form>
         </header>
         <main className="main">
           <div className="main__wrapper">
-            {/* <Results data={this.state.data} loading = {this.state.loading} error= {this.state.error}/> */}
+            {!isLoaded? <div>Loading...</div> : <Results data={data}/>}
           </div>
         </main>
       </>
