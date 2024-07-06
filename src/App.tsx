@@ -24,9 +24,9 @@ class App extends Component <unknown, AppState>  {
 
   loadData = async () => {
     const apiKey = import.meta.env.VITE_API_KEY as string;
-    const defaultQuery = 'https://api.pokemontcg.io/v2/cards/';
+    const defaultQuery = 'https://api.pokemontcg.io/v2/cards/?pageSize=10';
     const stateQuery = this.state.query;
-    const url = stateQuery.length ? defaultQuery + `?q=name:${stateQuery}*` : defaultQuery;
+    const url = stateQuery.length ? defaultQuery + `&q=name:${stateQuery}*` : defaultQuery;
     const options = {
       method: 'GET',
       headers: {

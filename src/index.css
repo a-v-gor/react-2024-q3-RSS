@@ -6,9 +6,15 @@ body {
   margin: 0;
 }
 
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .header {
   padding: 2em 0;
-  background-color: #ffebcd;
+  background-color: #00ced1;
 }
 
 .header__title {
@@ -24,4 +30,15 @@ body {
 
 .search-form__label {
   font-size: 1.6em;
+}
+
+.main {
+  flex-grow: 1;
+  background-color: azure;
+}
+
+.main__wrapper {
+  max-width: 90rem;
+  margin: 0 auto;
+  padding: 2rem;
 }

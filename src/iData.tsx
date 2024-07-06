@@ -3,10 +3,22 @@ interface PokemonData {
   name: string,
   supertype: string,
   subtypes: string[],
+  level: string,
   hp: string,
   types: string[],
+  evolvesFrom: string,
   evolvesTo: string[],
   rules: string[],
+  ancientTrait:{
+    name: string,
+    text: string
+  }[],
+  abilities:
+    {
+      name: string,
+      text: string,
+      type: string
+    }[],
   attacks: 
     {
       name: string,
@@ -20,6 +32,11 @@ interface PokemonData {
       type: string,
       value: string
     }[],
+  resistances: 
+    {
+      type: string,
+      value: string
+    }[]
   retreatCost: string[],
   convertedRetreatCost: number,
   set: {
@@ -43,11 +60,14 @@ interface PokemonData {
   number: string,
   artist: string,
   rarity: string,
+  flavorText: string,
   nationalPokedexNumbers: number[],
   legalities: {
+    standard : string,
     unlimited: string,
     expanded: string
   },
+  regulationMark: string,
   images: {
     small: string,
     large: string
