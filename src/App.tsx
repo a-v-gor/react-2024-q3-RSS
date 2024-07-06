@@ -10,15 +10,19 @@ interface AppState {
 
 class App extends Component <unknown, AppState>  {
 
-  state: Readonly<AppState> = {
-    query: localStorage.getItem('ag-pokemon-database') ?? '',
-    data: null,
-    isLoaded: false
+  constructor(props: Component) {
+    super(props);
+
+    this.state = {
+      query: localStorage.getItem('ag-pokemon-database') ?? '',
+      data: null,
+      isLoaded: false
+    }
+
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   loadData = async () => {
-    console.log('loadData');
-    
     const defaultQuery = 'https://api.pokemontcg.io/v2/cards/';
     const stateQuery = this.state.query;
     const url = stateQuery.length ? defaultQuery + `?q=name:${stateQuery}*` : defaultQuery;
@@ -47,14 +51,23 @@ class App extends Component <unknown, AppState>  {
     await this.loadData();
   }
 
+  async componentDidUpdate(prevState: AppState) {
+  if (prevState.query !== this.state.query && !this.state.isLoaded) {
+    await this.loadData()
+  }
+}
+
   handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.target as HTMLFormElement;
     const input = form.childNodes[1] as HTMLInputElement;
     const value = input.value;
     localStorage.setItem('ag-pokemon-database', value);
-    this.setState({
-      query: value
+    this.setState(()=>{
+      return {
+        query: value,
+        isLoaded: false
+      }
     })
   }
 
