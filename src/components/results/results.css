@@ -23,6 +23,7 @@
   transition: 0.6s;
   position:absolute;
   bottom: -110%;
+  width: 28.4rem;
 }
 
 .card:hover > .card__description-wrapper {

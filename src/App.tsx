@@ -1,6 +1,7 @@
 import { Component, FormEvent, ReactNode } from "react";
 import {ResponseData, PokemonData} from "./iData";
 import Results from "./components/results/Results";
+import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 
 interface AppState {
   query: string,
@@ -85,9 +86,12 @@ class App extends Component <unknown, AppState>  {
           </form>
         </header>
         <main className="main">
-          <div className="main__wrapper">
-            {!isLoaded? <div>Loading...</div> : <Results data={data}/>}
-          </div>
+          <ErrorBoundary>
+            <button className="error" onClick={()=> {throw new Error("Test error")}}>Throw error</button>
+            <div className="main__wrapper">
+              {!isLoaded? <div>Loading...</div> : <Results data={data}/>}
+            </div>
+          </ErrorBoundary>
         </main>
       </>
     );

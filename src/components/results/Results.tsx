@@ -71,8 +71,6 @@ interface iResultsProps {
 
 export default class Results extends Component<iResultsProps, unknown> {
   render() {
-    console.log(this.props.data);
-    
     return (
       <section className="results__list">
         {this.props.data?.map((card) => (
