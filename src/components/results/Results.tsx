@@ -95,19 +95,22 @@ export default class Results extends Component<iResultsProps, iResultsState> {
       <>
         <button className="error-button" onClick={this.throwError}>Throw an error!!!</button>
         <section className="results__list">
-          {this.props.data?.map((card) => (
-            <article key={card.id} className="results__card card">
-              <div className="card__description-wrapper">
-                <h2 className="card__title">{card.name}</h2>
-                {card.hp?<p className="card__description-text">HP: {card.hp}.</p> : <></>}
-                {card.types?<p className="card__description-text">Types: {card.types.join(', ')}.</p> : <></>}
-                {card.abilities?<Abilities data={card.abilities} /> : <></>}
-                {card.attacks?<Attacks data={card.attacks} /> : <></>}
-                {card.flavorText?<p className="card__description-text">{card.flavorText}.</p> : <></>}
-              </div>
-              <img src={card.images.small} alt={card.name} className="card__img" />
-            </article>
-          ))}
+          {this.props.data?.length? 
+            this.props.data?.map((card) => (
+              <article key={card.id} className="results__card card">
+                <div className="card__description-wrapper">
+                  <h2 className="card__title">{card.name}</h2>
+                  {card.hp?<p className="card__description-text">HP: {card.hp}.</p> : <></>}
+                  {card.types?<p className="card__description-text">Types: {card.types.join(', ')}.</p> : <></>}
+                  {card.abilities?<Abilities data={card.abilities} /> : <></>}
+                  {card.attacks?<Attacks data={card.attacks} /> : <></>}
+                  {card.flavorText?<p className="card__description-text">{card.flavorText}.</p> : <></>}
+                </div>
+                <img src={card.images.small} alt={card.name} className="card__img" />
+              </article>
+            )): 
+          <p className="info">No results.</p>
+        }
         </section>
       </>
     )

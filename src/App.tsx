@@ -23,14 +23,13 @@ class App extends Component <unknown, AppState>  {
   }
 
   loadData = async () => {
-    const apiKey = import.meta.env.VITE_API_KEY as string;
     const defaultQuery = 'https://api.pokemontcg.io/v2/cards/?pageSize=12';
     const stateQuery = this.state.query.replace(/\s/, '*');
     const url = stateQuery.length ? defaultQuery + `&q=name:${stateQuery}*` : defaultQuery;
     const options = {
       method: 'GET',
       headers: {
-        'X-Api-Key': apiKey
+        'X-Api-Key': 'cdfdabe0-4e3b-47d9-bb45-d216d2ce8d79'
       }
     }
     await fetch(url, options)
@@ -82,11 +81,12 @@ class App extends Component <unknown, AppState>  {
             <input type="search" id="search-form" className="search-form__input" defaultValue={this.state.query}/>
             <button type="submit" className="search-form__button">Search</button>
           </form>
+          
         </header>
         <main className="main">
             <div className="main__wrapper">
               {!isLoaded? 
-              <div>Loading...</div> :
+              <p className="info">Loading...</p> :
                 <Results data={data}/>
               }
             </div>
