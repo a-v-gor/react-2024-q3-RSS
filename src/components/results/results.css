@@ -1,3 +1,7 @@
+.error-button {
+  display: block;
+  margin: 1rem auto;
+}
 .results__list {
   display: flex;
   flex-wrap: wrap;
@@ -24,10 +28,12 @@
   position:absolute;
   bottom: -110%;
   width: 28.4rem;
+  overflow: auto;
+  max-height: 39.3rem;
 }
 
 .card:hover > .card__description-wrapper {
-  bottom: 0;
+  bottom: 0.8rem;
   background-color: #faebd7;
   padding: 0.8rem;
   border-radius: 0.8rem;

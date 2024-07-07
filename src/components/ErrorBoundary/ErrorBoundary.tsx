@@ -1,4 +1,5 @@
 import { Component, ErrorInfo, ReactNode } from "react";
+import './error-boundary.css'
 
 interface IErrorBoundaryProps {
   children: ReactNode
@@ -6,7 +7,7 @@ interface IErrorBoundaryProps {
 
 interface IErrorBoundaryState {
   hasError: boolean,
-  errorMessage: string
+  errorMessage: ErrorInfo | null
 }
 
 export default class ErrorBoundary extends Component <IErrorBoundaryProps, IErrorBoundaryState> {
@@ -14,14 +15,7 @@ export default class ErrorBoundary extends Component <IErrorBoundaryProps, IErro
     super(props);
     this.state = { 
       hasError: false,
-      errorMessage: ''
-     };
-  }
-
-  static getDerivedStateFromError(error: Error) {
-    console.error('ErrorBoundary caught an error: ', error);
-    return { hasError: true,
-      errorMessage: error.message
+      errorMessage: null
      };
   }
 
@@ -29,13 +23,13 @@ export default class ErrorBoundary extends Component <IErrorBoundaryProps, IErro
     console.error('ErrorBoundary caught an error: ', error, errorInfo);
     this.setState({
       hasError: true,
-      errorMessage: error.message
-    });
+      errorMessage: errorInfo
+    })
   }
 
   render() {
     if (this.state.hasError) {
-      return <h1>Error!</h1>;
+      return <h1 className="error">It is error in application! Please reload page.</h1>;
     } else {
       return this.props.children;
     }

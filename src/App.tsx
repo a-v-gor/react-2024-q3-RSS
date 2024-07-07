@@ -1,12 +1,11 @@
 import { Component, FormEvent, ReactNode } from "react";
 import {ResponseData, PokemonData} from "./iData";
 import Results from "./components/results/Results";
-import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 
 interface AppState {
   query: string,
   data: PokemonData[] | null,
-  isLoaded: boolean
+  isLoaded: boolean,
 }
 
 class App extends Component <unknown, AppState>  {
@@ -17,7 +16,7 @@ class App extends Component <unknown, AppState>  {
     this.state = {
       query: localStorage.getItem('ag-pokemon-database') ?? '',
       data: null,
-      isLoaded: false
+      isLoaded: false,
     }
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -26,7 +25,7 @@ class App extends Component <unknown, AppState>  {
   loadData = async () => {
     const apiKey = import.meta.env.VITE_API_KEY as string;
     const defaultQuery = 'https://api.pokemontcg.io/v2/cards/?pageSize=12';
-    const stateQuery = this.state.query;
+    const stateQuery = this.state.query.replace(/\s/, '*');
     const url = stateQuery.length ? defaultQuery + `&q=name:${stateQuery}*` : defaultQuery;
     const options = {
       method: 'GET',
@@ -72,7 +71,6 @@ class App extends Component <unknown, AppState>  {
       }
     })
   }
-
   render(): ReactNode {
     const [data, isLoaded] = [this.state.data, this.state.isLoaded]
     return (
@@ -86,12 +84,12 @@ class App extends Component <unknown, AppState>  {
           </form>
         </header>
         <main className="main">
-          <ErrorBoundary>
-            <button className="error" onClick={()=> {throw new Error("Test error")}}>Throw error</button>
             <div className="main__wrapper">
-              {!isLoaded? <div>Loading...</div> : <Results data={data}/>}
+              {!isLoaded? 
+              <div>Loading...</div> :
+                <Results data={data}/>
+              }
             </div>
-          </ErrorBoundary>
         </main>
       </>
     );
