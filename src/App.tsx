@@ -1,95 +1,105 @@
 import { Component, FormEvent, ReactNode } from "react";
-import {ResponseData, PokemonData} from "./iData";
+import { ResponseData, PokemonData } from "./iData";
 import Results from "./components/results/Results";
 
 interface AppState {
-  query: string,
-  data: PokemonData[] | null,
-  isLoaded: boolean,
+  query: string;
+  data: PokemonData[] | null;
+  isLoaded: boolean;
 }
 
-class App extends Component <unknown, AppState>  {
-
+class App extends Component<unknown, AppState> {
   constructor(props: Component) {
     super(props);
 
     this.state = {
-      query: localStorage.getItem('ag-pokemon-database') ?? '',
+      query: localStorage.getItem("ag-pokemon-database") ?? "",
       data: null,
       isLoaded: false,
-    }
+    };
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   loadData = async () => {
-    const defaultQuery = 'https://api.pokemontcg.io/v2/cards/?pageSize=12';
-    const stateQuery = this.state.query.replace(/\s/, '*');
-    const url = stateQuery.length ? defaultQuery + `&q=name:${stateQuery}*` : defaultQuery;
+    const defaultQuery = "https://api.pokemontcg.io/v2/cards/?pageSize=12";
+    const stateQuery = this.state.query.replace(/\s/, "*");
+    const url = stateQuery.length
+      ? defaultQuery + `&q=name:${stateQuery}*`
+      : defaultQuery;
     const options = {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'X-Api-Key': 'cdfdabe0-4e3b-47d9-bb45-d216d2ce8d79'
-      }
-    }
+        "X-Api-Key": "cdfdabe0-4e3b-47d9-bb45-d216d2ce8d79",
+      },
+    };
     await fetch(url, options)
-    .then((response) => response.json())
-    .then((cardsData: ResponseData) => {
+      .then((response) => response.json())
+      .then((cardsData: ResponseData) => {
         this.setState(() => {
           return {
             data: cardsData.data,
-            isLoaded: true
-          }
-      }),
-      () => {
-        console.log('error fetching data');
-      }
-    })
-  }
+            isLoaded: true,
+          };
+        }),
+          () => {
+            console.log("error fetching data");
+          };
+      });
+  };
 
   componentDidMount = async () => {
     await this.loadData();
-  }
+  };
 
   async componentDidUpdate(prevState: AppState) {
-  if (prevState.query !== this.state.query && !this.state.isLoaded) {
-    await this.loadData()
+    if (prevState.query !== this.state.query && !this.state.isLoaded) {
+      await this.loadData();
+    }
   }
-}
 
   handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.target as HTMLFormElement;
     const input = form.childNodes[1] as HTMLInputElement;
     const value = input.value;
-    localStorage.setItem('ag-pokemon-database', value);
-    this.setState(()=>{
+    localStorage.setItem("ag-pokemon-database", value);
+    this.setState(() => {
       return {
         query: value,
-        isLoaded: false
-      }
-    })
-  }
+        isLoaded: false,
+      };
+    });
+  };
   render(): ReactNode {
-    const [data, isLoaded] = [this.state.data, this.state.isLoaded]
+    const [data, isLoaded] = [this.state.data, this.state.isLoaded];
     return (
       <>
         <header className="header">
-          <h1 className = 'header__title'>Pokémon Database</h1>
+          <h1 className="header__title">Pokémon Database</h1>
           <form className="search-form" onSubmit={this.handleSubmit}>
-            <label htmlFor="search-form" className="search-form__label">Search the Pokemon: </label>
-            <input type="search" id="search-form" className="search-form__input" defaultValue={this.state.query}/>
-            <button type="submit" className="search-form__button">Search</button>
+            <label htmlFor="search-form" className="search-form__label">
+              Search the Pokemon:{" "}
+            </label>
+            <input
+              type="search"
+              id="search-form"
+              className="search-form__input"
+              defaultValue={this.state.query}
+            />
+            <button type="submit" className="search-form__button">
+              Search
+            </button>
           </form>
-          
         </header>
         <main className="main">
-            <div className="main__wrapper">
-              {!isLoaded? 
-              <p className="info">Loading...</p> :
-                <Results data={data}/>
-              }
-            </div>
+          <div className="main__wrapper">
+            {!isLoaded ? (
+              <p className="info">Loading...</p>
+            ) : (
+              <Results data={data} />
+            )}
+          </div>
         </main>
       </>
     );

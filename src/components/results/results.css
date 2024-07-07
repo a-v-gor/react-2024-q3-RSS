@@ -25,7 +25,7 @@
 
 .card__description-wrapper {
   transition: 0.6s;
-  position:absolute;
+  position: absolute;
   bottom: -110%;
   width: 28.4rem;
   overflow: auto;
@@ -48,4 +48,3 @@
   width: 100%;
   height: auto;
 }
-
